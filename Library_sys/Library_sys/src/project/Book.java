@@ -1,7 +1,7 @@
 package project;
 
 //Book class
-class Book {
+public class Book {
 	private String title;
 	private String author;
 	private String isbn;
