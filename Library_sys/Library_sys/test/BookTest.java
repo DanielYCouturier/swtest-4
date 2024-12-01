@@ -13,10 +13,10 @@ import static org.junit.Assert.*;
 
 public class BookTest {
     public Book book;
-    public Map<String,Book> title;
-    public Map<String,Book> author;
-    public Map<String,Book> isbn;
-    public Map<Boolean, Book> isAvailable;
+    public String title;
+    public String author;
+    public String isbn;
+    public boolean isAvailable;
 
     @BeforeEach
     public void createBook() throws Exception {
@@ -32,10 +32,10 @@ public class BookTest {
 
         var book = new Book("Java Programming", "Author A", "ISBN123");
 
-        title = (Map<String,Book>) titleField.get(book);
-        author = (Map<String,Book>) authorField.get(book);
-        isbn = (Map<String,Book>) isbnField.get(book);
-        isAvailable = (Map<Boolean,Book>) isAvailableField.get(book);
+        title = (String) titleField.get(book);
+        author = (String) authorField.get(book);
+        isbn = (String) isbnField.get(book);
+        isAvailable = (boolean) isAvailableField.get(book);
     }
 
     @Test

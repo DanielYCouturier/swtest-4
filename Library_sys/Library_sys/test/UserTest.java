@@ -1,21 +1,19 @@
-import org.junit.Assert.*;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import project.Book;
-import project.Library;
 import project.User;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     public User user;
-    public Map<String,User> name;
-    public Map<String,User> userId;
-    public Map<String,User> borrowedBooks;
+    public String name;
+    public String userId;
+    public List<Book> borrowedBooks;
 
     @BeforeEach
     public void createUser() throws Exception{
@@ -29,14 +27,14 @@ public class UserTest {
 
         var user = new User("Anthony", "user001");
 
-        name = (Map<String,User>) nameField.get(user);
-        userId = (Map<String,User>) userIdField.get(user);
-        borrowedBooks = (Map<String,User>) borrowedBooksField.get(user);
+        name = (String) nameField.get(user);
+        userId = (String) userIdField.get(user);
+        borrowedBooks = (List<Book>) borrowedBooksField.get(user);
     }
 
     @Test
     public void getNameTest() {
-        assertSame(this.name, user.getName());
+        assertSame(name, user.getName());
     }
 
     @Test
