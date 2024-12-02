@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LibraryManagementSystemMain.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in swtest-4 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">project</a> &gt; <span class="el_source">LibraryManagementSystemMain.java</span></div><h1>LibraryManagementSystemMain.java</h1><pre class="source lang-java linenums">package project;
+
+<span class="nc" id="L3">public class LibraryManagementSystemMain {</span>
+    public static void main(String[] args) {
+        
+    	// Create a library
+<span class="nc" id="L7">        Library library = new Library();</span>
+
+        // Add books to the library
+<span class="nc" id="L10">        library.addBook(new Book(&quot;Java Programming&quot;, &quot;Author A&quot;, &quot;ISBN123&quot;));</span>
+<span class="nc" id="L11">        library.addBook(new Book(&quot;Data Structures&quot;, &quot;Author B&quot;, &quot;ISBN456&quot;));</span>
+<span class="nc" id="L12">        library.addBook(new Book(&quot;Software Testing&quot;, &quot;Author C&quot;, &quot;ISBN789&quot;));</span>
+<span class="nc" id="L13">        library.addBook(new Book(&quot;Auto Testing&quot;, &quot;Author D&quot;, &quot;ISBN321&quot;));</span>
+
+        // Register users
+<span class="nc" id="L16">        User user1 = new User(&quot;Steve Harvey&quot;, &quot;User001&quot;);</span>
+<span class="nc" id="L17">        User user2 = new User(&quot;Jim Carrey&quot;, &quot;User002&quot;);</span>
+<span class="nc" id="L18">        library.registerUser(user1);</span>
+<span class="nc" id="L19">        library.registerUser(user2);</span>
+
+        // Borrow a book
+<span class="nc" id="L22">        library.borrowBook(&quot;User001&quot;, &quot;ISBN123&quot;);</span>
+<span class="nc" id="L23">        library.borrowBook(&quot;User002&quot;, &quot;ISBN789&quot;);</span>
+
+        // Display available books
+        //System.out.println();
+<span class="nc" id="L27">        library.displayAvailableBooks();</span>
+
+        // Return the book
+<span class="nc" id="L30">        System.out.println();</span>
+        //System.out.println(&quot;Returning 'Java Programming'...&quot;);
+<span class="nc" id="L32">        library.returnBook(&quot;User002&quot;, &quot;ISBN789&quot;);</span>
+        //System.out.println(&quot;Book returned successfully!&quot;);
+
+        // Display available books again
+<span class="nc" id="L36">        System.out.println();</span>
+<span class="nc" id="L37">        library.displayAvailableBooks();</span>
+        
+        // Display statistics
+<span class="nc" id="L40">        System.out.println();</span>
+<span class="nc" id="L41">        System.out.println(&quot;Total number of books: &quot; + library.getTotalNumberOfBooks());</span>
+<span class="nc" id="L42">        System.out.println(&quot;Total number of borrowed books: &quot; + library.getTotalBorrowedBooks());</span>
+<span class="nc" id="L43">        System.out.println(&quot;Average number of books per user: &quot; + library.getAverageBooksPerUser());</span>
+<span class="nc" id="L44">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Library.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in swtest-4 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">project</a> &gt; <span class="el_source">Library.java</span></div><h1>Library.java</h1><pre class="source lang-java linenums">package project;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Library {
+    private List&lt;Book&gt; books;
+    private Map&lt;String, User&gt; users;
+
+<span class="fc" id="L12">    public Library() {</span>
+<span class="fc" id="L13">        books = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L14">        users = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L15">    }</span>
+
+    public void addBook(Book book) {
+<span class="fc" id="L18">        books.add(book);</span>
+<span class="fc" id="L19">    }</span>
+
+    public void registerUser(User user) {
+<span class="fc" id="L22">        users.put(user.getUserId(), user);</span>
+<span class="fc" id="L23">    }</span>
+
+    public void borrowBook(String userId, String isbn) {
+<span class="fc" id="L26">        User user = users.get(userId);</span>
+<span class="fc" id="L27">        Book book = findBookByIsbn(isbn);</span>
+
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (user != null &amp;&amp; book != null) {</span>
+<span class="fc" id="L30">            user.borrowBook(book);</span>
+        } else {
+<span class="fc" id="L32">            throw new IllegalStateException(&quot;User or Book not found&quot;);</span>
+        }
+<span class="fc" id="L34">    }</span>
+
+    public void returnBook(String userId, String isbn) {
+<span class="fc" id="L37">        User user = users.get(userId);</span>
+<span class="fc" id="L38">        Book book = findBookByIsbn(isbn);</span>
+
+<span class="fc bfc" id="L40" title="All 4 branches covered.">        if (user != null &amp;&amp; book != null) {</span>
+<span class="fc" id="L41">            user.returnBook(book);</span>
+        } else {
+<span class="fc" id="L43">            throw new IllegalStateException(&quot;User or Book not found&quot;);</span>
+        }
+<span class="fc" id="L45">    }</span>
+
+    public void displayAvailableBooks() {
+<span class="fc" id="L48">        System.out.println(&quot;Available books in the library:&quot;);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (Book book : getAvailableBooks()) {</span>
+<span class="fc" id="L50">            System.out.println(book.getTitle() + &quot; by &quot; + book.getAuthor());</span>
+<span class="fc" id="L51">        }</span>
+<span class="fc" id="L52">    }</span>
+
+    public List&lt;Book&gt; getAvailableBooks() {
+<span class="fc" id="L55">        List&lt;Book&gt; availableBooks = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (Book book : books) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (book.isAvailable()) {</span>
+<span class="fc" id="L58">                availableBooks.add(book);</span>
+            }
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">        return availableBooks;</span>
+    }
+
+    // Calculate the total number of books
+    public int getTotalNumberOfBooks() {
+<span class="fc" id="L66">        return books.size();</span>
+    }
+
+    // Calculate the total number of borrowed books
+    public int getTotalBorrowedBooks() {
+<span class="fc" id="L71">        int borrowedBooks = 0;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (Book book : books) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if (!book.isAvailable()) {</span>
+<span class="fc" id="L74">                borrowedBooks++;</span>
+            }
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">        return borrowedBooks;</span>
+    }
+
+    // Calculate the average number of books per user
+    public double getAverageBooksPerUser() {
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (users.isEmpty()) {</span>
+<span class="nc" id="L83">            return 0.0;</span>
+        }
+        
+<span class="fc" id="L86">        int totalBorrowed = 0;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (User user : users.values()) {</span>
+<span class="fc" id="L88">            totalBorrowed += user.getBorrowedBooks().size();</span>
+<span class="fc" id="L89">        }</span>
+        
+<span class="fc" id="L91">        return (double) totalBorrowed / users.size();</span>
+    }
+
+    private Book findBookByIsbn(String isbn) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (Book book : books) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (book.getIsbn().equals(isbn)) {</span>
+<span class="fc" id="L97">                return book;</span>
+            }
+<span class="fc" id="L99">        }</span>
+<span class="fc" id="L100">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

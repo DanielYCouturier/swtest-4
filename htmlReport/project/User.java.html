@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in swtest-4 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">project</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package project;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// User class
+public class User {
+    private String name;
+    private String userId;
+    private List&lt;Book&gt; borrowedBooks;
+
+<span class="fc" id="L12">    public User(String name, String userId) {</span>
+<span class="fc" id="L13">        this.name = name;</span>
+<span class="fc" id="L14">        this.userId = userId;</span>
+<span class="fc" id="L15">        this.borrowedBooks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L16">    }</span>
+
+    public String getName() {
+<span class="nc" id="L19">        return name;</span>
+    }
+
+    public String getUserId() {
+<span class="fc" id="L23">        return userId;</span>
+    }
+
+    public List&lt;Book&gt; getBorrowedBooks() {
+<span class="fc" id="L27">        return borrowedBooks;</span>
+    }
+
+    public void borrowBook(Book book) {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (book.isAvailable()) {</span>
+<span class="fc" id="L32">            book.borrowBook();</span>
+<span class="fc" id="L33">            borrowedBooks.add(book);</span>
+        } else {
+<span class="fc" id="L35">            throw new IllegalStateException(&quot;Book is not available for borrowing&quot;);</span>
+        }
+<span class="fc" id="L37">    }</span>
+
+    public void returnBook(Book book) {
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (borrowedBooks.contains(book)) {</span>
+<span class="fc" id="L41">            book.returnBook();</span>
+<span class="fc" id="L42">            borrowedBooks.remove(book);</span>
+        } else {
+<span class="fc" id="L44">            throw new IllegalStateException(&quot;Book not borrowed by this user&quot;);</span>
+        }
+<span class="fc" id="L46">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
