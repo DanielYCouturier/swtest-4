@@ -1,15 +1,11 @@
-import org.junit.Assert.*;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import project.Book;
-import project.Library;
 import project.User;
 
 import java.lang.reflect.Field;
-import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookTest {
     public Book book;
@@ -30,7 +26,7 @@ public class BookTest {
         isbnField.setAccessible(true);
         isAvailableField.setAccessible(true);
 
-        var book = new Book("Java Programming", "Author A", "ISBN123");
+        book = new Book("Java Programming", "Author A", "ISBN123");
 
         title = (String) titleField.get(book);
         author = (String) authorField.get(book);
@@ -40,35 +36,35 @@ public class BookTest {
 
     @Test
     public void getTitleTest() {
-        assertSame(this.title, book.getTitle());
+        assertSame(title, book.getTitle());
     }
 
     @Test
     public void getAuthorTest() {
-        assertSame(this.author, book.getAuthor());
+        assertSame(author, book.getAuthor());
     }
 
     @Test
     public void getIsbnTest() {
-        assertSame(this.isbn, book.getIsbn());
+        assertSame(isbn, book.getIsbn());
     }
 
     @Test
     public void isAvailableTest() {
-        assertSame(this.isAvailable, book.isAvailable());
+        assertSame(isAvailable, book.isAvailable());
     }
 
     @Test
     public void borrowBookTest() {
-        assertSame(this.isAvailable, book.isAvailable());
+        assertSame(isAvailable, book.isAvailable());
         book.borrowBook();
-        assertSame(this.isAvailable, book.isAvailable());
+        assertNotSame(isAvailable, book.isAvailable());
     }
 
     @Test
     public void returnBookTest() {
         book.returnBook();
-        assertSame(this.isAvailable, book.isAvailable());
+        assertSame(isAvailable, book.isAvailable());
     }
 
 }

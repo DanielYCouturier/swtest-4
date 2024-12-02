@@ -5,7 +5,6 @@ import project.User;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +24,7 @@ public class UserTest {
         userIdField.setAccessible(true);
         borrowedBooksField.setAccessible(true);
 
-        var user = new User("Anthony", "user001");
+        user = new User("Anthony", "user001");
 
         name = (String) nameField.get(user);
         userId = (String) userIdField.get(user);
@@ -39,12 +38,12 @@ public class UserTest {
 
     @Test
     public void getUserIdTest() {
-        assertSame(this.userId, user.getUserId());
+        assertSame(userId, user.getUserId());
     }
 
     @Test
     public void getBorrowedBooksTest() {
-        assertSame(this.borrowedBooks, user.getBorrowedBooks());
+        assertSame(borrowedBooks, user.getBorrowedBooks());
     }
 
     @Test
