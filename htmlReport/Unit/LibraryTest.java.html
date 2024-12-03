@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LibraryTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in swtest-4 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">Unit</a> &gt; <span class="el_source">LibraryTest.java</span></div><h1>LibraryTest.java</h1><pre class="source lang-java linenums">package Unit;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import project.Library;
+import project.Book;
+import project.User;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L19">class LibraryTest {</span>
+    private Library lib;
+    private User user1;
+    private User user2;
+    private User user3;
+    private Book book1;
+    private Book book2;
+    private Book book3;
+    private List&lt;Book&gt; lib_books;
+    private Map&lt;String, User&gt; lib_users;
+
+    @BeforeEach
+    public void setUpLibrary() throws Exception {
+<span class="fc" id="L32">        lib = new Library();</span>
+<span class="fc" id="L33">        user1 = new User(&quot;name_1&quot;, &quot;userid_1&quot;);</span>
+<span class="fc" id="L34">        user2 = new User(&quot;name_2&quot;, &quot;userid_2&quot;);</span>
+<span class="fc" id="L35">        user3 = new User(&quot;name_3&quot;, &quot;userid_3&quot;);</span>
+<span class="fc" id="L36">        book1 = new Book(&quot;title_1&quot;, &quot;author_1&quot;, &quot;isbn_1&quot;);</span>
+<span class="fc" id="L37">        book2 = new Book(&quot;title_2&quot;, &quot;author_2&quot;, &quot;isbn_2&quot;);</span>
+<span class="fc" id="L38">        book3 = new Book(&quot;title_3&quot;, &quot;author_3&quot;, &quot;isbn_3&quot;);</span>
+<span class="fc" id="L39">        lib.registerUser(user1);</span>
+<span class="fc" id="L40">        lib.registerUser(user2);</span>
+<span class="fc" id="L41">        lib.registerUser(user3);</span>
+<span class="fc" id="L42">        lib.addBook(book1);</span>
+<span class="fc" id="L43">        lib.addBook(book2);</span>
+<span class="fc" id="L44">        lib.addBook(book3);</span>
+<span class="fc" id="L45">        Field usersField = Library.class.getDeclaredField(&quot;users&quot;);</span>
+<span class="fc" id="L46">        usersField.setAccessible(true);</span>
+<span class="fc" id="L47">        lib_users = (Map&lt;String, User&gt;) usersField.get(lib);</span>
+
+<span class="fc" id="L49">        Field booksField = Library.class.getDeclaredField(&quot;books&quot;);</span>
+<span class="fc" id="L50">        booksField.setAccessible(true);</span>
+<span class="fc" id="L51">        lib_books = (List&lt;Book&gt;) booksField.get(lib);</span>
+<span class="fc" id="L52">    }</span>
+
+    @Test
+    void testAdd() {
+<span class="fc" id="L56">        User user4 = new User(&quot;name_4&quot;, &quot;userid_4&quot;);</span>
+<span class="fc" id="L57">        lib.registerUser(user4);</span>
+<span class="fc" id="L58">        assertSame(lib_users.get(user4.getUserId()),user4);</span>
+<span class="fc" id="L59">    }</span>
+    @Test
+    public void testAddDuplicate(){
+<span class="fc" id="L62">        User user4 = new User(&quot;name_4&quot;, &quot;userid_1&quot;);</span>
+<span class="fc" id="L63">        lib.registerUser(user4);</span>
+<span class="fc" id="L64">        assertSame(lib_users.get(user4.getUserId()), user4);</span>
+<span class="nc" id="L65">        assertSame(lib_users.get(user1.getUserId()), user1);</span>
+<span class="nc" id="L66">    }</span>
+
+    @Test
+    public void testAddBook() throws Exception {
+<span class="fc" id="L70">        Book book4 = new Book(&quot;title_4&quot;, &quot;author_4&quot;, &quot;isbn_4&quot;);</span>
+<span class="fc" id="L71">        lib.addBook(book4);</span>
+<span class="fc" id="L72">        assertTrue(lib_books.contains(book4));</span>
+<span class="fc" id="L73">    }</span>
+
+    @Test
+    public void testBorrowReturnBook() {
+<span class="fc" id="L77">        lib.borrowBook(user1.getUserId(), book1.getIsbn());</span>
+<span class="fc" id="L78">        assertTrue(user1.getBorrowedBooks().contains(book1));</span>
+<span class="fc" id="L79">        assertFalse(book1.isAvailable());</span>
+<span class="fc" id="L80">        lib.returnBook(user1.getUserId(), book1.getIsbn());</span>
+<span class="fc" id="L81">        assertFalse(user1.getBorrowedBooks().contains(book1));</span>
+<span class="fc" id="L82">        assertTrue(book1.isAvailable());</span>
+<span class="fc" id="L83">    }</span>
+    @Test
+    public void testBorrowInvalidUser(){
+<span class="fc" id="L86">        User user4 = new User(&quot;name_4&quot;, &quot;userid_4&quot;);</span>
+<span class="fc" id="L87">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L88">            lib.borrowBook(user4.getUserId(), book1.getIsbn());</span>
+<span class="nc" id="L89">        });</span>
+<span class="fc" id="L90">    }</span>
+    @Test
+    public void testBorrowInvalidBook(){
+<span class="fc" id="L93">        Book book4 = new Book(&quot;title_4&quot;,&quot;author_4&quot;,&quot;isbn_4&quot;);</span>
+<span class="fc" id="L94">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L95">            lib.borrowBook(user1.getUserId(), book4.getIsbn());</span>
+<span class="nc" id="L96">        });</span>
+<span class="fc" id="L97">    }</span>
+    @Test
+    public void testBorrowUnavailableBook(){
+<span class="fc" id="L100">        lib.borrowBook(user1.getUserId(), book1.getIsbn());</span>
+<span class="fc" id="L101">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L102">            lib.borrowBook(user2.getUserId(), book1.getIsbn());</span>
+<span class="nc" id="L103">        });</span>
+<span class="fc" id="L104">    }</span>
+
+
+    @Test
+    public void returnOtherUsersBookTest() {
+<span class="fc" id="L109">        lib.borrowBook(user1.getUserId(), book1.getIsbn());</span>
+<span class="fc" id="L110">        assertTrue(user1.getBorrowedBooks().contains(book1));</span>
+<span class="fc" id="L111">        assertFalse(book1.isAvailable());</span>
+
+<span class="fc" id="L113">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L114">            lib.returnBook(user2.getUserId(),book1.getIsbn());</span>
+<span class="nc" id="L115">        });</span>
+<span class="fc" id="L116">    }</span>
+
+    @Test
+    public void invalidUserReturnBookTest() {
+<span class="fc" id="L120">        User user4 = new User(&quot;name_4&quot;, &quot;userid_4&quot;);</span>
+<span class="fc" id="L121">        lib.borrowBook(user1.getUserId(), book1.getIsbn());</span>
+<span class="fc" id="L122">        assertTrue(user1.getBorrowedBooks().contains(book1));</span>
+<span class="fc" id="L123">        assertFalse(book1.isAvailable());</span>
+
+<span class="fc" id="L125">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L126">            lib.returnBook(user4.getUserId(),book1.getIsbn());</span>
+<span class="nc" id="L127">        });</span>
+<span class="fc" id="L128">    }</span>
+    @Test
+    public void invalidBookReturnTest() {
+<span class="fc" id="L131">        Book book4 = new Book(&quot;title_4&quot;, &quot;author_4&quot;, &quot;isbn_4&quot;);</span>
+<span class="fc" id="L132">        assertThrows(Exception.class,() -&gt;{</span>
+<span class="nc" id="L133">            lib.returnBook(user1.getUserId(),book4.getIsbn());</span>
+<span class="nc" id="L134">        });</span>
+<span class="fc" id="L135">    }</span>
+
+    @Test
+    public void testDisplayBooks(){
+<span class="fc" id="L139">        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();</span>
+<span class="fc" id="L140">        PrintStream sysOut = System.out;</span>
+<span class="fc" id="L141">        System.setOut(new PrintStream(outputStream));</span>
+
+<span class="fc" id="L143">        lib.borrowBook(user1.getUserId(),book1.getIsbn());</span>
+<span class="fc" id="L144">        lib.displayAvailableBooks();</span>
+
+<span class="fc" id="L146">        String capturedOutput = outputStream.toString();</span>
+<span class="fc" id="L147">        System.setOut(sysOut);</span>
+
+<span class="fc" id="L149">        assertFalse(capturedOutput.contains(&quot;title_1&quot;));</span>
+<span class="fc" id="L150">        assertTrue(capturedOutput.contains(&quot;title_2&quot;));</span>
+<span class="fc" id="L151">    }</span>
+    @Test
+    public void testAvailableBooks(){
+<span class="fc" id="L154">        List&lt;Book&gt; available = lib.getAvailableBooks();</span>
+        //Establish Baseline
+<span class="fc" id="L156">        assertTrue(available.contains(book1));</span>
+<span class="fc" id="L157">        assertTrue(available.contains(book2));</span>
+
+        // Test available list
+<span class="fc" id="L160">        lib.borrowBook(user1.getUserId(),book1.getIsbn());</span>
+<span class="fc" id="L161">        available = lib.getAvailableBooks();</span>
+<span class="fc" id="L162">        assertFalse(available.contains(book1));</span>
+<span class="fc" id="L163">        assertTrue(available.contains(book2));</span>
+<span class="fc" id="L164">    }</span>
+
+    @Test
+    public void testBookCount(){
+<span class="fc" id="L168">        int bookCount = lib.getTotalNumberOfBooks();</span>
+<span class="fc" id="L169">        assertEquals(3, bookCount);</span>
+<span class="fc" id="L170">    }</span>
+
+    @Test
+    public void testBorrowedBookCount(){
+<span class="fc" id="L174">        assertEquals(0, lib.getTotalBorrowedBooks());</span>
+<span class="fc" id="L175">        lib.borrowBook(user1.getUserId(),book1.getIsbn());</span>
+<span class="fc" id="L176">        assertEquals(1, lib.getTotalBorrowedBooks());</span>
+<span class="fc" id="L177">        lib.borrowBook(user1.getUserId(),book2.getIsbn());</span>
+<span class="fc" id="L178">        assertEquals(2, lib.getTotalBorrowedBooks());</span>
+<span class="fc" id="L179">        lib.borrowBook(user1.getUserId(),book3.getIsbn());</span>
+<span class="fc" id="L180">        assertEquals(3, lib.getTotalBorrowedBooks());</span>
+<span class="fc" id="L181">    }</span>
+    @Test
+    public void averageEmptyTest(){
+<span class="fc" id="L184">        assertEquals(0, lib.getAverageBooksPerUser(), 0.01);</span>
+<span class="fc" id="L185">    }</span>
+    @Test
+    public void averageTestOneThird(){
+<span class="fc" id="L188">        lib.borrowBook(user1.getUserId(),book1.getIsbn());</span>
+<span class="fc" id="L189">        assertEquals(0.33, lib.getAverageBooksPerUser(), 0.01);</span>
+<span class="fc" id="L190">    }</span>
+
+    @Test
+    public void averageTestAll(){
+<span class="fc" id="L194">        lib.borrowBook(user1.getUserId(),book1.getIsbn());</span>
+<span class="fc" id="L195">        lib.borrowBook(user2.getUserId(),book2.getIsbn());</span>
+<span class="fc" id="L196">        lib.borrowBook(user3.getUserId(),book3.getIsbn());</span>
+<span class="fc" id="L197">        assertEquals(1, lib.getAverageBooksPerUser(), 0.01);</span>
+<span class="fc" id="L198">    }</span>
+    @Test
+    public void findByIsbnTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+<span class="fc" id="L201">        Method findBookByIsbn = Library.class.getDeclaredMethod(&quot;findBookByIsbn&quot;, String.class);</span>
+<span class="fc" id="L202">        findBookByIsbn.setAccessible(true);</span>
+
+<span class="fc" id="L204">        Book book1Search = (Book) findBookByIsbn.invoke(lib, book1.getIsbn());</span>
+<span class="fc" id="L205">        Book book2Search = (Book) findBookByIsbn.invoke(lib, book2.getIsbn());</span>
+<span class="fc" id="L206">        Book book3Search = (Book) findBookByIsbn.invoke(lib, book3.getIsbn());</span>
+
+
+<span class="fc" id="L209">        assertEquals(book1, book1Search);</span>
+<span class="fc" id="L210">        assertEquals(book2, book2Search);</span>
+<span class="fc" id="L211">        assertEquals(book3, book3Search);</span>
+
+
+
+<span class="fc" id="L215">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntegrationTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in swtest-4 Coverage Results</a> &gt; <a href="index.source.html" class="el_package">Integration</a> &gt; <span class="el_source">IntegrationTest.java</span></div><h1>IntegrationTest.java</h1><pre class="source lang-java linenums">package Integration;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import project.Library;
+import project.Book;
+import project.User;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+<span class="fc" id="L14">public class IntegrationTest {</span>
+    public Library lib;
+
+    public User user;
+    public String name;
+    public String userId;
+    public List&lt;Book&gt; borrowedBooks;
+
+    public Book book;
+    public String title;
+    public String author;
+    public String isbn;
+    public boolean isAvailable;
+
+    public List&lt;Book&gt; lib_books;
+    public Map&lt;String, User&gt; lib_users;
+
+    @BeforeEach
+    public void setUpLibrary() throws Exception {
+<span class="fc" id="L33">        lib = new Library();</span>
+
+<span class="fc" id="L35">        user = new User(&quot;name&quot;, &quot;userid&quot;);</span>
+<span class="fc" id="L36">        Field nameField = User.class.getDeclaredField(&quot;name&quot;);</span>
+<span class="fc" id="L37">        Field userIdField = User.class.getDeclaredField(&quot;userId&quot;);</span>
+<span class="fc" id="L38">        Field borrowedBooksField = User.class.getDeclaredField(&quot;borrowedBooks&quot;);</span>
+
+<span class="fc" id="L40">        nameField.setAccessible(true);</span>
+<span class="fc" id="L41">        userIdField.setAccessible(true);</span>
+<span class="fc" id="L42">        borrowedBooksField.setAccessible(true);</span>
+
+<span class="fc" id="L44">        name = (String) nameField.get(user);</span>
+<span class="fc" id="L45">        userId = (String) userIdField.get(user);</span>
+<span class="fc" id="L46">        borrowedBooks = (List&lt;Book&gt;) borrowedBooksField.get(user);</span>
+
+<span class="fc" id="L48">        book = new Book(&quot;title&quot;, &quot;author&quot;, &quot;isbn&quot;);</span>
+<span class="fc" id="L49">        Field titleField = Book.class.getDeclaredField(&quot;title&quot;);</span>
+<span class="fc" id="L50">        Field authorField = Book.class.getDeclaredField(&quot;author&quot;);</span>
+<span class="fc" id="L51">        Field isbnField = Book.class.getDeclaredField(&quot;isbn&quot;);</span>
+<span class="fc" id="L52">        Field isAvailableField = Book.class.getDeclaredField(&quot;isAvailable&quot;);</span>
+
+<span class="fc" id="L54">        titleField.setAccessible(true);</span>
+<span class="fc" id="L55">        authorField.setAccessible(true);</span>
+<span class="fc" id="L56">        isbnField.setAccessible(true);</span>
+<span class="fc" id="L57">        isAvailableField.setAccessible(true);</span>
+
+<span class="fc" id="L59">        title = (String) titleField.get(book);</span>
+<span class="fc" id="L60">        author = (String) authorField.get(book);</span>
+<span class="fc" id="L61">        isbn = (String) isbnField.get(book);</span>
+<span class="fc" id="L62">        isAvailable = (boolean) isAvailableField.get(book);</span>
+
+<span class="fc" id="L64">        lib.registerUser(user);</span>
+<span class="fc" id="L65">        lib.addBook(book);</span>
+
+<span class="fc" id="L67">        Field usersField = Library.class.getDeclaredField(&quot;users&quot;);</span>
+<span class="fc" id="L68">        usersField.setAccessible(true);</span>
+<span class="fc" id="L69">        lib_users = (Map&lt;String, User&gt;) usersField.get(lib);</span>
+
+<span class="fc" id="L71">        Field booksField = Library.class.getDeclaredField(&quot;books&quot;);</span>
+<span class="fc" id="L72">        booksField.setAccessible(true);</span>
+<span class="fc" id="L73">        lib_books = (List&lt;Book&gt;) booksField.get(lib);</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+    public void bookLibraryConsistency() {
+<span class="fc" id="L78">        assertSame(isAvailable, book.isAvailable());</span>
+<span class="fc" id="L79">        lib.borrowBook(userId, isbn);</span>
+
+<span class="fc" id="L81">        var user2 = new User(&quot;name2&quot;, &quot;userid2&quot;);</span>
+<span class="fc" id="L82">        lib.registerUser(user2);</span>
+<span class="fc" id="L83">        boolean error = false;</span>
+       try {
+<span class="nc" id="L85">           lib.borrowBook(user2.getUserId(), isbn);</span>
+<span class="fc" id="L86">       }catch (Exception e) {</span>
+<span class="fc" id="L87">            error = true;</span>
+<span class="nc" id="L88">       }</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">       assertEquals(error,!book.isAvailable());</span>
+<span class="fc" id="L90">    }</span>
+    @Test
+    public void bookLibraryConsistency2() {
+<span class="fc" id="L93">        var isAvailable = book.isAvailable();</span>
+<span class="fc" id="L94">        var user2 = new User(&quot;name2&quot;, &quot;userid2&quot;);</span>
+<span class="fc" id="L95">        lib.registerUser(user2);</span>
+<span class="fc" id="L96">        boolean error = false;</span>
+        try {
+<span class="fc" id="L98">            lib.borrowBook(user2.getUserId(), isbn);</span>
+<span class="nc" id="L99">        }catch (Exception e) {</span>
+<span class="nc" id="L100">            error = true;</span>
+<span class="fc" id="L101">        }</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        assertEquals(error,!isAvailable);</span>
+<span class="fc" id="L103">    }</span>
+
+    @Test
+    public void userLibraryConsistency() {
+<span class="fc" id="L107">        lib.borrowBook(userId, isbn);</span>
+<span class="fc" id="L108">        var userOwned = user.getBorrowedBooks().contains(book);</span>
+<span class="fc" id="L109">        var error = false;</span>
+        try{
+<span class="fc" id="L111">            user.returnBook(book);</span>
+<span class="nc" id="L112">        }catch (Exception e) {</span>
+<span class="nc" id="L113">            error = true;</span>
+<span class="fc" id="L114">        }</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        assertEquals(error,!userOwned);</span>
+<span class="fc" id="L116">    }</span>
+
+    @Test
+    public void userLibraryConsistency2() {
+<span class="fc" id="L120">        var userOwned = user.getBorrowedBooks().contains(book);</span>
+<span class="fc" id="L121">        var error = false;</span>
+        try{
+<span class="nc" id="L123">            user.returnBook(book);</span>
+<span class="fc" id="L124">        }catch (Exception e) {</span>
+<span class="fc" id="L125">            error = true;</span>
+<span class="nc" id="L126">        }</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        assertEquals(error,!userOwned);</span>
+<span class="fc" id="L128">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

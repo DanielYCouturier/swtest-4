@@ -1,3 +1,5 @@
+package Integration;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import project.Library;
@@ -100,5 +102,29 @@ public class IntegrationTest {
         assertEquals(error,!isAvailable);
     }
 
+    @Test
+    public void userLibraryConsistency() {
+        lib.borrowBook(userId, isbn);
+        var userOwned = user.getBorrowedBooks().contains(book);
+        var error = false;
+        try{
+            user.returnBook(book);
+        }catch (Exception e) {
+            error = true;
+        }
+        assertEquals(error,!userOwned);
+    }
+
+    @Test
+    public void userLibraryConsistency2() {
+        var userOwned = user.getBorrowedBooks().contains(book);
+        var error = false;
+        try{
+            user.returnBook(book);
+        }catch (Exception e) {
+            error = true;
+        }
+        assertEquals(error,!userOwned);
+    }
 
 }
