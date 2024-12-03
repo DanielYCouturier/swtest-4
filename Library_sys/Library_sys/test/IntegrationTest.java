@@ -72,12 +72,33 @@ public class IntegrationTest {
     }
 
     @Test
-    public void borrowUnavailableBook() {
+    public void bookLibraryConsistency() {
         assertSame(isAvailable, book.isAvailable());
         lib.borrowBook(userId, isbn);
+
         var user2 = new User("name2", "userid2");
-        assertThrows(Exception.class,() ->{
-            lib.borrowBook(user2.getUserId(), isbn);
-        });
+        lib.registerUser(user2);
+        boolean error = false;
+       try {
+           lib.borrowBook(user2.getUserId(), isbn);
+       }catch (Exception e) {
+            error = true;
+       }
+       assertEquals(error,!book.isAvailable());
     }
+    @Test
+    public void bookLibraryConsistency2() {
+        var isAvailable = book.isAvailable();
+        var user2 = new User("name2", "userid2");
+        lib.registerUser(user2);
+        boolean error = false;
+        try {
+            lib.borrowBook(user2.getUserId(), isbn);
+        }catch (Exception e) {
+            error = true;
+        }
+        assertEquals(error,!isAvailable);
+    }
+
+
 }
