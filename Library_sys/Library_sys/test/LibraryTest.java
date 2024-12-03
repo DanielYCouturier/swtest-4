@@ -59,8 +59,7 @@ class LibraryTest {
     public void testAddDuplicate(){
         User user4 = new User("name_4", "userid_1");
         lib.registerUser(user4);
-        assertSame(lib_users.get(user4.getUserId()), user4);
-        assertSame(lib_users.get(user1.getUserId()), user1);
+        assertNotSame(lib_users.get(user1.getUserId()),lib_users.get(user4.getUserId()));
     }
 
     @Test
@@ -169,6 +168,7 @@ class LibraryTest {
 
     @Test
     public void testBorrowedBookCount(){
+        assertNotEquals(lib.getTotalNumberOfBooks(), lib.getTotalBorrowedBooks());
         assertEquals(0, lib.getTotalBorrowedBooks());
         lib.borrowBook(user1.getUserId(),book1.getIsbn());
         assertEquals(1, lib.getTotalBorrowedBooks());
