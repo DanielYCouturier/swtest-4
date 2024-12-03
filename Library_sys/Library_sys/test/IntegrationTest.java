@@ -72,9 +72,12 @@ public class IntegrationTest {
     }
 
     @Test
-    public void bookAvailability() {
+    public void borrowUnavailableBook() {
         assertSame(isAvailable, book.isAvailable());
         lib.borrowBook(userId, isbn);
-        assertSame(lib_books.contains(book), book.isAvailable());
+        var user2 = new User("name2", "userid2");
+        assertThrows(Exception.class,() ->{
+            lib.borrowBook(user2.getUserId(), isbn);
+        });
     }
 }
